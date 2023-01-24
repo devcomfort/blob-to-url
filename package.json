@@ -5,8 +5,10 @@
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "exports": {
-    "import": "./esm/index.js",
-    "require": "./cjs/index.js"
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js"
+    }
   },
   "license": "MIT",
   "scripts": {
