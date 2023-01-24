@@ -14,8 +14,12 @@
   "license": "MIT",
   "scripts": {
     "build": "npm run build:cjs; npm run build:esm",
+    "build:clean": "npm run clean & npm run build",
     "build:cjs": "tsc --p ./cjs/tsconfig.json",
-    "build:esm": "tsc --p ./esm/tsconfig.json"
+    "build:esm": "tsc --p ./esm/tsconfig.json",
+    "clean": "npm run clean:cjs; npm run clean:esm",
+    "clean:cjs": "tsc --build --clean ./cjs",
+    "clean:esm": "tsc --build --clean ./esm"
   },
   "files": [
     "./esm/*",
