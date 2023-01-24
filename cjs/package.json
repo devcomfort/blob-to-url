@@ -1,5 +1,4 @@
 {
-  "name": "cjs",
   "type": "commonjs",
   "dependencies": {
     "@types/node": "^18.11.18",

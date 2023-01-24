@@ -1,5 +1,4 @@
 {
-  "name": "esm",
   "type": "module",
   "dependencies": {
     "@types/node": "^18.11.18",
