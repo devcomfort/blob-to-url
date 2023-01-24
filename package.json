@@ -25,6 +25,7 @@
     "lib": "./src"
   },
   "files": [
+    "@types",
     "esm",
     "cjs",
     "src"
