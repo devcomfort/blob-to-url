@@ -18,8 +18,8 @@
     "build:esm": "tsc --p ./esm/tsconfig.json"
   },
   "files": [
-    "./esm/**/*",
-    "./cjs/**/*"
+    "./esm/*",
+    "./cjs/*"
   ],
   "author": {
     "name": "devcomfort",
