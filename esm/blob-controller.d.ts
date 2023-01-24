@@ -1,3 +1,4 @@
+import type { File, Blob } from "blob-polyfill";
 declare const toBlobURL: (_blob: File | Blob) => {
     url: string;
     revoke: () => void;
