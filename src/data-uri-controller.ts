@@ -1,4 +1,4 @@
-import { Blob, FileReader } from "blob-polyfill";
+import { type File, type Blob, FileReader } from "blob-polyfill";
 
 type DataURI = string;
 
