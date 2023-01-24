@@ -4,6 +4,10 @@
   "version": "0.0.5",
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
+  "exports": {
+    "import": "./esm/index.js",
+    "require": "./cjs/index.js"
+  },
   "license": "MIT",
   "scripts": {
     "build": "npm run build:cjs; npm run build:esm",
