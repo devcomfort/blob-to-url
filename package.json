@@ -1,7 +1,7 @@
 {
   "name": "blob-to-url",
   "packageManager": "yarn@3.2.3",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "license": "MIT",
