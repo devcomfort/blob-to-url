@@ -22,8 +22,9 @@
     "clean:esm": "tsc --build --clean ./esm"
   },
   "files": [
-    "./esm/*",
-    "./cjs/*"
+    "esm",
+    "cjs",
+    "src"
   ],
   "author": {
     "name": "devcomfort",
