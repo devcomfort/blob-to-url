@@ -17,6 +17,10 @@
     "build:cjs": "tsc --p ./cjs/tsconfig.json",
     "build:esm": "tsc --p ./esm/tsconfig.json"
   },
+  "files": [
+    "esm",
+    "cjs"
+  ],
   "author": {
     "name": "devcomfort",
     "email": "kimdonghyun026@gmail.com"
