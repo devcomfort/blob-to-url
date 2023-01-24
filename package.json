@@ -21,6 +21,9 @@
     "clean:cjs": "tsc --build --clean ./cjs",
     "clean:esm": "tsc --build --clean ./esm"
   },
+  "directories": {
+    "lib": "./src"
+  },
   "files": [
     "esm",
     "cjs",
