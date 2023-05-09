@@ -1,5 +1,3 @@
-import type { File, Blob } from "blob-polyfill";
-
 /**
  * Function : Returns a browser-cached url address.
  * Saves a File or Blob of data in your browser and returns a url to the cached data.

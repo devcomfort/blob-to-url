@@ -1,5 +1,3 @@
-import { type File, type Blob, FileReader } from "blob-polyfill";
-
 type DataURI = string;
 
 /**

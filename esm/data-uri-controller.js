@@ -1,4 +1,3 @@
-import { FileReader } from "blob-polyfill";
 const toDataURI = (_blob) => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
