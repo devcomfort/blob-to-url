@@ -1,8 +1,8 @@
-const toBlobURL = (_blob) => {
-    const _url = URL.createObjectURL(_blob);
+var toBlobURL = function (_blob) {
+    var _url = URL.createObjectURL(_blob);
     return {
         url: _url,
-        revoke: () => URL.revokeObjectURL(_url),
+        revoke: function () { return URL.revokeObjectURL(_url); },
     };
 };
 export default toBlobURL;
