@@ -25,3 +25,8 @@ _blobUrl.revoke(); // Revoke blob url.
 const _dataURI = toDataURI(_blob);
 console.log(_dataURI); // translated base64-encoded Blob|File object.
 ```
+
+## Task List
+
+- [ ] Add `Vitest` based test code.
+- [ ] Add `GitHub Actions` based CI/CD environment. (To make an automated publish system)
