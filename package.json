@@ -1,7 +1,7 @@
 {
   "name": "blob-to-url",
   "description": "Simple Blob to URL code snippet. (ESM/CJS support)",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "exports": {
