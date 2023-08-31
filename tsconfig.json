@@ -1,8 +1,4 @@
 {
-  "include": [
-    "./src/**/*.ts",
-    "./@types/**/*.d.ts"
-  ],
   "compilerOptions": {
     "target": "ES5",
     "declaration": true,
@@ -15,7 +11,5 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["src/**/*.ts", "src/@types/**/*.d.ts"]
 }
