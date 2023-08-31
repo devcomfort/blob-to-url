@@ -12,13 +12,13 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:cjs && npm run build:esm",
     "build:clean": "npm run clean && npm run build",
-    "build:cjs": "tsc --p ./cjs/tsconfig.json",
-    "build:esm": "tsc --p ./esm/tsconfig.json",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --p tsconfig.cjs.json",
+    "build:esm": "tsc --p tsconfig.esm.json",
     "clean": "npm run clean:cjs && npm run clean:esm",
-    "clean:cjs": "tsc --build --clean ./cjs",
-    "clean:esm": "tsc --build --clean ./esm"
+    "clean:cjs": "rimraf dist/cjs",
+    "clean:esm": "rimraf dist/esm"
   },
   "directories": {
     "lib": "./src"
