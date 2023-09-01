@@ -5,8 +5,8 @@
   "types": "./dist/esm/index.d.ts",
   "exports": {
     ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
     },
     "./package.json": "./package.json"
