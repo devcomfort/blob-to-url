@@ -1,4 +1,2 @@
-import { toBlobURL } from "./blob-controller";
-import { toDataURI } from "./data-uri-controller";
-
-export { toBlobURL, toDataURI };
+export { toBlobURL } from "./blob-controller";
+export { toDataURI } from "./data-uri-controller";
