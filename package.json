@@ -1,55 +1,50 @@
 {
-  "name": "blob-to-url",
-  "description": "Simple Blob to URL code snippet. (ESM/CJS support)",
-  "version": "0.2.4",
-  "types": "./dist/esm/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/esm/index.d.ts"
-    },
-    "./package.json": "./package.json"
-  },
-  "license": "MIT",
-  "scripts": {
-    "build:clean": "npm run clean && npm run build",
-    "build": "npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc --p tsconfig.cjs.json",
-    "build:esm": "tsc --p tsconfig.esm.json",
-    "clean": "npm run clean:cjs && npm run clean:esm",
-    "clean:cjs": "npm exec rimraf dist/cjs",
-    "clean:esm": "npm exec rimraf dist/esm"
-  },
-  "files": [
-    "@types",
-    "dist",
-    "src"
-  ],
-  "author": {
-    "name": "devcomfort",
-    "email": "kimdonghyun026@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/devcomfort/blob-to-url.git"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.com",
-    "access": "public"
-  },
-  "keywords": [
-    "blob",
-    "datauri",
-    "base64",
-    "file"
-  ],
-  "dependencies": {
-    "@types/jest": "^29.2.6",
-    "@types/node": "^18.11.18",
-    "typescript": "^4.9.4"
-  },
-  "devDependencies": {
-    "rimraf": "^5.0.1"
-  }
+	"name": "blob-to-url",
+	"description": "Simple Blob to URL code snippet. (ESM/CJS support)",
+	"version": "0.2.4",
+	"type": "module",
+	"types": "./dist/esm/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/esm/index.js",
+			"require": "./dist/cjs/index.js",
+			"types": "./dist/esm/index.d.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"license": "MIT",
+	"scripts": {
+		"build": "rollup -c"
+	},
+	"files": ["dist"],
+	"author": {
+		"name": "devcomfort",
+		"email": "im@devcomfort.me"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/devcomfort/blob-to-url.git"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.com",
+		"access": "public"
+	},
+	"keywords": ["blob", "datauri", "base64", "stringify", "urlify"],
+	"dependencies": {
+		"@types/jest": "^29.5.14",
+		"@types/node": "^22.10.10",
+		"rollup": "^4.32.0",
+		"typescript": "^5.7.3"
+	},
+	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^16.0.0",
+		"@rollup/plugin-sucrase": "^5.0.2",
+		"@rollup/plugin-terser": "^0.4.4",
+		"rimraf": "^6.0.1",
+		"rollup-plugin-clear": "^2.0.7",
+		"rollup-plugin-dts": "^6.1.1",
+		"rollup-plugin-progress": "^1.1.2",
+		"vitest": "^3.0.4"
+	},
+	"packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }
