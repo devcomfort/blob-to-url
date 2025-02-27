@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm package
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4.1.7
         with:
           name: blob-to-url
       - uses: actions/setup-node@v3
