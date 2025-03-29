@@ -38,7 +38,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       
       - name: Run tests
         run: pnpm test:ci
@@ -75,19 +75,23 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       
       - name: Build package
         run: pnpm build
       
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: blob-to-url
           path: |
-            ./
-            !node_modules
-            !.git
+            ./dist
+            ./package.json
+            ./LICENSE
+            ./README.md
+          compression-level: 9
+          retention-days: 1
+          overwrite: true
 
   publish-npm:
     needs: build
@@ -97,9 +101,10 @@ jobs:
     environment: npm package
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: blob-to-url
+          path: ./
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
