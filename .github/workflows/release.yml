@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '릴리스 버전(major, minor, patch)'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Setup Git User
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build package
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test:ci
+
+      - name: Bump version
+        id: bump-version
+        run: |
+          current_version=$(node -p "require('./package.json').version")
+          echo "Current version: $current_version"
+          
+          # 버전 증가
+          if [ "${{ github.event.inputs.version }}" == "patch" ]; then
+            npm version patch --no-git-tag-version
+          elif [ "${{ github.event.inputs.version }}" == "minor" ]; then
+            npm version minor --no-git-tag-version
+          elif [ "${{ github.event.inputs.version }}" == "major" ]; then
+            npm version major --no-git-tag-version
+          fi
+          
+          new_version=$(node -p "require('./package.json').version")
+          echo "New version: $new_version"
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        run: |
+          git add package.json
+          git commit -m "chore: release v${{ steps.bump-version.outputs.new_version }}"
+          git tag -a v${{ steps.bump-version.outputs.new_version }} -m "Release v${{ steps.bump-version.outputs.new_version }}"
+          git push
+          git push --tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.bump-version.outputs.new_version }}
+          name: Release v${{ steps.bump-version.outputs.new_version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

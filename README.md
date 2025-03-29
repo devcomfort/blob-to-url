@@ -1,12 +1,14 @@
 # blob-to-url
 
-A lightweight utility for generating blob URLs and data URIs with ESM and CJS support.
+A lightweight utility for generating blob URLs and data URIs with ESM, CJS, and UMD support.
 
 ## Features
 
-- Supports both ESM and CommonJS module systems
+- Supports ESM, CommonJS, and UMD module systems
 - Generate blob URLs
 - Convert blobs to data URIs
+- No external dependencies
+- TypeScript definitions included
 
 ## API
 
@@ -24,6 +26,12 @@ import { toBlobURL, toDataURI } from "blob-to-url";
 // CommonJS Require
 const { toBlobURL, toDataURI } = require("blob-to-url");
 
+// Browser (UMD)
+<script src="https://unpkg.com/blob-to-url"></script>
+<script>
+  const { toBlobURL, toDataURI } = window.blobToUrl;
+</script>
+
 // Blob URL Example
 const { url, revoke } = toBlobURL(myBlob);
 console.log(url);  // Blob URL
@@ -34,7 +42,33 @@ const dataURI = toDataURI(myBlob);
 console.log(dataURI);  // Base64 encoded URL
 ```
 
-## Development Roadmap
+## Build System
 
-- [ ] Implement Vitest test suite
-- [ ] Set up GitHub Actions for CI/CD
+This package uses [pkgroll](https://github.com/privatenumber/pkgroll) for ESM and CJS build, and Rollup for UMD build.
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build the package
+pnpm build
+
+# Run tests
+pnpm test
+```
+
+## CI/CD
+
+The project uses GitHub Actions for continuous integration and deployment:
+
+- Automated tests run on pull requests
+- Automated builds and npm package publishing
+- Manual releases via GitHub Actions workflow
+
+## Development Status
+
+- [x] ESM, CJS, and UMD module support
+- [x] Implement Vitest test suite with Edge Runtime
+- [x] Set up GitHub Actions for CI/CD

@@ -1,49 +1,124 @@
-name: on release
+name: Build, Test & Publish
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-      - uses: pnpm/action-setup@v2
+          node-version: 18
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          version: 7.14.2
-      - run: pnpm i
-      - run: pnpm build
-      - uses: actions/upload-artifact@v3
+          version: 9
+          run_install: false
+      
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Run tests
+        run: pnpm test:ci
+  
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+          run_install: false
+      
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Build package
+        run: pnpm build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: blob-to-url
           path: |
             ./
             !node_modules
+            !.git
 
-  publish-npm-registry:
+  publish-npm:
     needs: build
     runs-on: ubuntu-latest
+    # 메인 브랜치에 푸시될 때만 실행
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: npm package
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
         with:
           name: blob-to-url
-      - uses: actions/setup-node@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           registry-url: https://registry.npmjs.org/
-      - uses: pnpm/action-setup@v2
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          version: 7.14.2
-        # --no-git-checks: 작업 과정 중 제외 및 추가되는 파일이 발생하여 생기는 문제 무시합니다.
-      - uses: JS-DevTools/npm-publish@v2
+          version: 9
+          run_install: false
+      
+      - name: Publish to npm
+        uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          check-version: true
   # publish-github-registry:
   #   runs-on: ubuntu-latest
   #   permissions:
