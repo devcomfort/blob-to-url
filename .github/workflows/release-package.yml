@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# 명시적 권한 설정
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -99,6 +104,8 @@ jobs:
     # 메인 브랜치에 푸시될 때만 실행
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: npm package
+    permissions:
+      id-token: write # npm 프로비넌스를 위해 필요
     steps:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -119,24 +126,9 @@ jobs:
           run_install: false
       
       - name: Publish to npm
-        uses: JS-DevTools/npm-publish@v2
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
-          check-version: true
-  # publish-github-registry:
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     packages: write
-  #     contents: read
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: 16
-  #         registry-url: https://npm.pkg.github.com/
-  #         scope: "@devcomfort"
-  #     - run: npm ci
-  #     - run: npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          strategy: all
+          provenance: true

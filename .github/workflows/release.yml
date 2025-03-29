@@ -16,6 +16,7 @@ on:
 # 명시적 권한 설정
 permissions:
   contents: write  # GitHub 릴리스 생성 및 태그 푸시를 위해 필요
+  id-token: write  # npm 프로비넌스를 위해 필요
 
 jobs:
   release:
@@ -113,6 +114,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
           
       - name: Publish to npm
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          strategy: all
+          provenance: true 
