@@ -23,9 +23,10 @@
 	"license": "MIT",
 	"scripts": {
 		"clean": "rimraf dist",
-		"build": "npm run clean && pkgroll && rollup -c rollup.config.umd.js",
+		"build": "npm run clean && pkgroll --verbose && rollup -c rollup.config.umd.js",
+		"build:ci": "npm run clean && NODE_ENV=production pkgroll --verbose && rollup -c rollup.config.umd.js",
 		"test": "vitest",
-		"test:ci": "vitest run",
+		"test:ci": "vitest run --reporter verbose",
 		"prepublishOnly": "npm run build",
 		"release:patch": "npm version patch && git push && git push --tags",
 		"release:minor": "npm version minor && git push && git push --tags",
@@ -54,22 +55,22 @@
 		"urlify"
 	],
 	"dependencies": {
-		"@types/jest": "^29.5.14",
-		"@types/node": "^22.10.10",
-		"ky": "^1.7.4",
-		"rollup": "^4.32.0",
-		"typescript": "^5.7.3"
 	},
 	"devDependencies": {
 		"@edge-runtime/vm": "^5.0.0",
 		"@rollup/plugin-node-resolve": "^16.0.0",
 		"@rollup/plugin-sucrase": "^5.0.2",
 		"@rollup/plugin-terser": "^0.4.4",
+		"@types/jest": "^29.5.14",
+		"@types/node": "^22.10.10",
+		"ky": "^1.7.4",
 		"pkgroll": "^2.12.1",
 		"rimraf": "^6.0.1",
+		"rollup": "^4.32.0",
 		"rollup-plugin-clear": "^2.0.7",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-progress": "^1.1.2",
+		"typescript": "^5.7.3",
 		"vitest": "^3.0.4"
 	},
 	"packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",

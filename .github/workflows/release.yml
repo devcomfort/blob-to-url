@@ -13,6 +13,10 @@ on:
           - minor
           - major
 
+# 명시적 권한 설정
+permissions:
+  contents: write  # GitHub 릴리스 생성 및 태그 푸시를 위해 필요
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -38,12 +42,25 @@ jobs:
         with:
           version: 9
           run_install: false
+          
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build package
-        run: pnpm build
+        run: pnpm build:ci
 
       - name: Run tests
         run: pnpm test:ci
@@ -83,5 +100,19 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+          files: |
+            ./dist/**/*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # npm에 배포
+      - name: Setup Node.js for npm publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
+          
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
