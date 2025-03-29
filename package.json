@@ -24,7 +24,12 @@
 	"scripts": {
 		"clean": "rimraf dist",
 		"build": "npm run clean && pkgroll && rollup -c rollup.config.umd.js",
-		"test": "vitest"
+		"test": "vitest",
+		"test:ci": "vitest run",
+		"prepublishOnly": "npm run build",
+		"release:patch": "npm version patch && git push && git push --tags",
+		"release:minor": "npm version minor && git push && git push --tags",
+		"release:major": "npm version major && git push && git push --tags"
 	},
 	"files": [
 		"dist"
