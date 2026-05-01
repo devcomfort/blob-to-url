@@ -1,6 +1,6 @@
 {
 	"name": "blob-to-url",
-	"description": "Simple Blob to URL code snippet. (ESM/CJS support)",
+	"description": "Zero-dependency utility for generating blob URLs and base64 data URIs. ESM, CJS, and UMD with TypeScript types.",
 	"version": "0.3.1",
 	"type": "module",
 	"types": "./dist/index.d.ts",
