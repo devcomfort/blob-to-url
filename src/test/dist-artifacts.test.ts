@@ -1,3 +1,16 @@
+/**
+ * Post-build integration tests.
+ *
+ * Validates that the actual dist/ outputs (ESM, CJS, UMD, type declarations)
+ * work correctly after `pnpm build`. These tests exercise the shipped
+ * artifacts — not the source code — to catch build misconfigurations.
+ *
+ * Guard pattern:
+ *   If dist/ doesn't exist (e.g., in CI before the build step), the suite
+ *   emits a no-op test to avoid an outright failure. This lets the test file
+ *   always pass syntactically while making it obvious when the build is
+ *   missing.
+ */
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -8,13 +21,26 @@ const __dirname = dirname(__filename);
 const distDir = resolve(__dirname, '../../dist');
 
 if (!existsSync(distDir)) {
+	// Guard: dist/ not built. Emit a single no-op test so the suite
+	// doesn't fail outright (useful in CI before the build step).
 	describe('dist/ artifacts', () => {
 		it('dist/ not built — run `pnpm build` first', () => {
 			expect(true).toBe(true);
 		});
 	});
 } else {
+	/**
+	 * Full post-build integration suite.
+	 *
+	 * Dynamically imports the ESM and CJS bundles, evaluates the UMD
+	 * bundle with new Function, and reads type declaration files.
+	 */
 	describe('dist/ artifacts', () => {
+		/**
+		 * ESM import tests.
+		 * The primary module format — import() loads index.js and verifies
+		 * that exports match the public API (toBlobURL, toDataURI).
+		 */
 		describe('ESM (index.js)', () => {
 			it('can be dynamically imported', async () => {
 				const mod = await import(
@@ -46,6 +72,11 @@ if (!existsSync(distDir)) {
 			});
 		});
 
+		/**
+		 * CJS require tests.
+		 * Loaded via import() (Node's CJS interop), verifying the
+		 * CommonJS bundle exposes the same API as ESM.
+		 */
 		describe('CJS (index.cjs)', () => {
 			it('can be required', async () => {
 				const { toBlobURL, toDataURI } = await import(
@@ -66,6 +97,17 @@ if (!existsSync(distDir)) {
 			});
 		});
 
+		/**
+		 * UMD bundle tests.
+		 * The UMD bundle is evaluated as a string via new Function because
+		 * it's not a module — it attaches to window.blobToUrl in a browser.
+		 *
+		 * Why new Function and not eval:
+		 *   The UMD bundle starts with "use strict", which would prevent
+		 *   eval from leaking the returned variable into the surrounding
+		 *   scope. new Function creates an isolated scope; we chain a
+		 *   "return blobToUrl;" suffix to extract the global.
+		 */
 		describe('UMD (index.global.js)', () => {
 			it('evaluates and exposes blobToUrl global', () => {
 				const code = readFileSync(
@@ -74,7 +116,9 @@ if (!existsSync(distDir)) {
 				);
 				expect(code.length).toBeGreaterThan(0);
 
-				// new Function (not eval) — UMD bundle's "use strict" would prevent var leakage
+				// new Function creates a function from the UMD source code.
+				// We append a return statement to extract the global variable
+				// that the UMD bundle would normally attach to window.
 				const getModule = new Function(code + '\nreturn blobToUrl;');
 				const mod = getModule();
 
@@ -100,6 +144,12 @@ if (!existsSync(distDir)) {
 			});
 		});
 
+		/**
+		 * Type declaration tests.
+		 * Reads the .d.ts and .d.cts files to verify they exist, are
+		 * non-empty, and declare the public API symbols. Catches cases
+		 * where the build step succeeds but forgets to emit types.
+		 */
 		describe('Type declarations', () => {
 			it('index.d.ts exists and is non-empty', () => {
 				const dts = readFileSync(
