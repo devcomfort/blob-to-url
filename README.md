@@ -89,7 +89,7 @@ const uri = await toDataURI(blob);
 
 ## Build
 
-This package uses [pkgroll](https://github.com/privatenumber/pkgroll) for ESM, CJS, and type declaration generation, and [esbuild](https://esbuild.github.io/) for the UMD/IIFE browser bundle.
+This package uses [tsdown](https://tsdown.dev) — powered by [Rolldown](https://rolldown.rs) and [Oxc](https://oxc.rs) — for ESM, CJS, IIFE, and type declaration generation in a single build step.
 
 ## Development
 
