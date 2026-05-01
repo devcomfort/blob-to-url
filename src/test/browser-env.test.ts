@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-describe('jsdom browser environment', () => {
+describe('happy-dom browser environment', () => {
 	it('provides FileReader natively', () => {
 		expect(typeof FileReader).toBe('function');
 	});
