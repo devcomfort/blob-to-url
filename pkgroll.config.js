@@ -7,10 +7,6 @@ export default {
   outputs: {
     cjs: true,
     esm: true,
-    umd: {
-      name: "blobToUrl",
-      fileName: "index.global.js",
-    },
     dts: true,
   },
   esbuild: {
