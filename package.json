@@ -24,9 +24,8 @@
 	"scripts": {
 		"clean": "rimraf dist dist-types",
 		"build": "tsdown",
-		"build:ci": "tsdown",
 		"test": "vitest",
-		"test:ci": "pnpm build && vitest run --reporter verbose",
+		"test:ci": "vitest run --reporter verbose",
 		"prepublishOnly": "npm run build",
 		"release:patch": "npm version patch && git push && git push --tags",
 		"release:minor": "npm version minor && git push && git push --tags",

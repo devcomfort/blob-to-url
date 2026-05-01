@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: '릴리스 버전(major, minor, patch)'
+        description: 'Version bump type'
         required: true
         default: 'patch'
         type: choice
@@ -13,103 +13,82 @@ on:
           - minor
           - major
 
-# 명시적 권한 설정
 permissions:
-  contents: write  # GitHub 릴리스 생성 및 태그 푸시를 위해 필요
-  id-token: write  # npm 프로비넌스를 위해 필요
+  contents: write
+  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: npm package
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - name: Setup Git User
+      - name: Setup Git
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2
         with:
           version: 9.15.4
           run_install: false
-          
+
       - name: Get pnpm store directory
         shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          restore-keys: ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
 
-      - name: Build package
-        run: pnpm build:ci
-
-      - name: Run tests
-        run: pnpm test:ci
-
+      # Step 1: Bump version FIRST so dist/ gets the correct version
       - name: Bump version
-        id: bump-version
+        id: bump
         run: |
-          current_version=$(node -p "require('./package.json').version")
-          echo "Current version: $current_version"
-          
-          # 버전 증가
-          if [ "${{ github.event.inputs.version }}" == "patch" ]; then
-            npm version patch --no-git-tag-version
-          elif [ "${{ github.event.inputs.version }}" == "minor" ]; then
-            npm version minor --no-git-tag-version
-          elif [ "${{ github.event.inputs.version }}" == "major" ]; then
-            npm version major --no-git-tag-version
-          fi
-          
-          new_version=$(node -p "require('./package.json').version")
-          echo "New version: $new_version"
-          echo "new_version=$new_version" >> $GITHUB_OUTPUT
+          old=$(node -p "require('./package.json').version")
+          npm version ${{ github.event.inputs.version }} --no-git-tag-version
+          new=$(node -p "require('./package.json').version")
+          echo "old=$old" >> $GITHUB_OUTPUT
+          echo "new=$new" >> $GITHUB_OUTPUT
+          echo "$old → $new"
 
-      - name: Commit and push changes
+      # Step 2: Build with new version
+      - run: pnpm build
+
+      # Step 3: Test the build
+      - run: vitest run --reporter verbose
+
+      # Step 4: Commit, tag, push
+      - name: Commit and push
         run: |
           git add package.json
-          git commit -m "chore: release v${{ steps.bump-version.outputs.new_version }}"
-          git tag -a v${{ steps.bump-version.outputs.new_version }} -m "Release v${{ steps.bump-version.outputs.new_version }}"
-          git push
-          git push --tags
+          git commit -m "chore: release v${{ steps.bump.outputs.new }}"
+          git tag -a "v${{ steps.bump.outputs.new }}" -m "Release v${{ steps.bump.outputs.new }}"
+          git push origin main --tags
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.bump-version.outputs.new_version }}
-          name: Release v${{ steps.bump-version.outputs.new_version }}
-          draft: false
-          prerelease: false
-          generate_release_notes: true
-          files: |
-            ./dist/**/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Publish to npm
-        uses: JS-DevTools/npm-publish@v3
+      # Step 5: Publish to npm
+      - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           strategy: all
-          provenance: true 
+          provenance: true
+
+      # Step 6: Create GitHub Release
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump.outputs.new }}
+          name: v${{ steps.bump.outputs.new }}
+          generate_release_notes: true
