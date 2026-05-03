@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.3](https://github.com/devcomfort/blob-to-url/compare/blob-to-url-v0.3.2...blob-to-url-v0.3.3) (2026-05-03)
+
+
+### Bug Fixes
+
+* trigger release-please with corrected publish auth ([09facef](https://github.com/devcomfort/blob-to-url/commit/09facef6b81da40c9617e8434f51fb562133cca8))
+* use JS-DevTools/npm-publish in release-please (ENEEDAUTH) ([477ab05](https://github.com/devcomfort/blob-to-url/commit/477ab05918dbf609f5a55c1b91c90e1e79a9b628))
+
 ## [0.3.2](https://github.com/devcomfort/blob-to-url/compare/blob-to-url-v0.3.1...blob-to-url-v0.3.2) (2026-05-03)
 
 
