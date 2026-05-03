@@ -1,7 +1,7 @@
 {
 	"name": "blob-to-url",
 	"description": "Zero-dependency utility for generating blob URLs and base64 data URIs. ESM, CJS, and IIFE with TypeScript types.",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"type": "module",
 	"types": "./dist/index.d.ts",
 	"exports": {
