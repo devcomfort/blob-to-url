@@ -100,6 +100,12 @@ pnpm test             # Run tests (requires build first)
 pnpm test:ci          # Run tests (CI mode)
 ```
 
+## Releases
+
+This project uses [release-please](https://github.com/googleapis/release-please) for automated version management. Release PRs are automatically created when conventional commits (`feat:`, `fix:`, `!:` for breaking changes) are pushed to `main`.
+
+To trigger a code review or fix, comment `/oc` on any issue or pull request.
+
 ## License
 
 [MIT](LICENSE) © devcomfort
