@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/blob-to-url?color=blue)](https://www.npmjs.com/package/blob-to-url) [![npm downloads/week](https://img.shields.io/npm/dw/blob-to-url?color=blue)](https://www.npmjs.com/package/blob-to-url) [![npm downloads/month](https://img.shields.io/npm/dm/blob-to-url?color=blue)](https://www.npmjs.com/package/blob-to-url) [![npm total downloads](https://img.shields.io/npm/dt/blob-to-url?color=blue)](https://www.npmjs.com/package/blob-to-url) [![size](https://img.shields.io/bundlephobia/minzip/blob-to-url?label=size)](https://bundlephobia.com/package/blob-to-url) [![min](https://img.shields.io/bundlephobia/min/blob-to-url?label=min)](https://bundlephobia.com/package/blob-to-url) [![license](https://img.shields.io/npm/l/blob-to-url)](https://github.com/devcomfort/blob-to-url/blob/main/LICENSE) [![types](https://img.shields.io/npm/types/blob-to-url)](https://www.npmjs.com/package/blob-to-url) [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/) [![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](https://www.npmjs.com/package/blob-to-url) [![CI](https://img.shields.io/github/actions/workflow/status/devcomfort/blob-to-url/ci.yml?branch=main&label=CI)](https://github.com/devcomfort/blob-to-url/actions) [![issues](https://img.shields.io/github/issues/devcomfort/blob-to-url)](https://github.com/devcomfort/blob-to-url/issues) [![last commit](https://img.shields.io/github/last-commit/devcomfort/blob-to-url)](https://github.com/devcomfort/blob-to-url)
 
-A lightweight, zero-dependency utility for generating **blob URLs** and **base64 data URIs** in the browser. Ships ESM, CommonJS, and UMD builds with TypeScript definitions.
+A lightweight, zero-dependency utility for generating **blob URLs** and **base64 data URIs** in the browser. Ships ESM, CommonJS, and IIFE builds with TypeScript definitions.
 
 ## Installation
 
@@ -39,7 +39,7 @@ console.log(dataURI);  // data:text/plain;base64,SGVsbG8sIHdvcmxkIQ==
 const { toBlobURL, toDataURI } = require("blob-to-url");
 ```
 
-### Browser (UMD via CDN)
+### Browser (IIFE via CDN)
 
 ```html
 <script src="https://unpkg.com/blob-to-url"></script>
@@ -82,7 +82,7 @@ const uri = await toDataURI(blob);
 ## Features
 
 - **Zero dependencies** — no runtime dependencies, tiny bundle
-- **ESM, CommonJS, and UMD** — works everywhere
+- **ESM, CommonJS, and IIFE** — works everywhere
 - **TypeScript-first** — type definitions included out of the box
 - **Tree-shakeable** — import only what you need
 - **Lightweight** — < 1KB minified + gzipped

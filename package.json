@@ -1,6 +1,6 @@
 {
 	"name": "blob-to-url",
-	"description": "Zero-dependency utility for generating blob URLs and base64 data URIs. ESM, CJS, and UMD with TypeScript types.",
+	"description": "Zero-dependency utility for generating blob URLs and base64 data URIs. ESM, CJS, and IIFE with TypeScript types.",
 	"version": "0.3.1",
 	"type": "module",
 	"types": "./dist/index.d.ts",
@@ -26,10 +26,10 @@
 		"build": "tsdown",
 		"test": "vitest",
 		"test:ci": "vitest run --reporter verbose",
-		"prepublishOnly": "npm run build",
-		"release:patch": "npm version patch && git push && git push --tags",
-		"release:minor": "npm version minor && git push && git push --tags",
-		"release:major": "npm version major && git push && git push --tags"
+		"prepublishOnly": "pnpm build",
+		"release:patch": "pnpm version patch && git push && git push --tags",
+		"release:minor": "pnpm version minor && git push && git push --tags",
+		"release:major": "pnpm version major && git push && git push --tags"
 	},
 	"files": [
 		"dist"

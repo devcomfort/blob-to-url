@@ -95,6 +95,16 @@ if (!existsSync(distDir)) {
 				expect(url).toMatch(/^blob:/);
 				revoke();
 			});
+
+			it('toDataURI creates base64 data URI', async () => {
+				const { toDataURI } = await import(
+					pathToFileURL(resolve(distDir, 'index.cjs')).href
+				);
+				const blob = new Blob(['hello'], { type: 'text/plain' });
+				const uri = await toDataURI(blob);
+				expect(uri).toMatch(/^data:text\/plain;base64,/);
+				expect(uri).toContain(btoa('hello'));
+			});
 		});
 
 		/**
@@ -141,6 +151,19 @@ if (!existsSync(distDir)) {
 				const { url, revoke } = mod.toBlobURL(blob);
 				expect(url).toMatch(/^blob:/);
 				revoke();
+			});
+
+			it('toDataURI works from UMD bundle', async () => {
+				const code = readFileSync(
+					resolve(distDir, 'index.global.js'),
+					'utf-8',
+				);
+				const getModule = new Function(code + '\nreturn blobToUrl;');
+				const mod = getModule();
+				const blob = new Blob(['hello'], { type: 'text/plain' });
+				const uri = await mod.toDataURI(blob);
+				expect(uri).toMatch(/^data:text\/plain;base64,/);
+				expect(uri).toContain(btoa('hello'));
 			});
 		});
 
