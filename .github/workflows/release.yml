@@ -68,7 +68,7 @@ jobs:
       - run: pnpm build
 
       # Step 3: Test the build
-      - run: vitest run --reporter verbose
+      - run: pnpm vitest run --reporter verbose
 
       # Step 4: Commit, tag, push
       - name: Commit and push

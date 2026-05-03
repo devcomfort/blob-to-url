@@ -45,7 +45,7 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm build && vitest run --reporter verbose
+      - run: pnpm build && pnpm vitest run --reporter verbose
 
   build:
     needs: test
