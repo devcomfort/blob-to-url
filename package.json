@@ -43,7 +43,7 @@
 		"url": "https://github.com/devcomfort/blob-to-url.git"
 	},
 	"publishConfig": {
-		"registry": "https://registry.npmjs.com",
+		"registry": "https://registry.npmjs.org",
 		"access": "public"
 	},
 	"keywords": [

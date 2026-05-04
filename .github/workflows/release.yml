@@ -79,12 +79,12 @@ jobs:
           git push origin main --tags
 
       # Step 5: Publish to npm
-      - uses: JS-DevTools/npm-publish@v3
+      - uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
-          strategy: all
           provenance: true
+          strategy: all
 
       # Step 6: Create GitHub Release
       - uses: softprops/action-gh-release@v2
