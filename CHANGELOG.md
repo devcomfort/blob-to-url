@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/devcomfort/blob-to-url/compare/blob-to-url-v0.3.3...blob-to-url-v0.3.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* resolve npm publish 404, upgrade publish action, fix registry URL ([960dc5d](https://github.com/devcomfort/blob-to-url/commit/960dc5da0e2facb7e80c54e4cecd3abafecee5bb))
+
 ## [0.3.3](https://github.com/devcomfort/blob-to-url/compare/blob-to-url-v0.3.2...blob-to-url-v0.3.3) (2026-05-03)
 
 
